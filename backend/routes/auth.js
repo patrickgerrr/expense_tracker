@@ -6,6 +6,8 @@ authRouter.post('/signup', authLimiter, authController.signup);
 
 authRouter.post('/login', authLimiter, authController.login);
 
-authRouter.post('/checkuser', authLimiter, authController.checkUser)
+authRouter.post('/checkuser', authLimiter, authController.checkUser);
+
+authRouter.get('/getKey',authController.getKey);
 
 module.exports = authRouter;

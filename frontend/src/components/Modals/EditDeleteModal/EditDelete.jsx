@@ -3,11 +3,40 @@ import "./EditDelete.css";
 import { useRef, useState, useEffect } from "react";
 import { set } from "react-hook-form";
 import { toast } from "react-toastify";
+import { base64ToUint8Array, encrypt ,decrypt} from "../../../utils/crypto";
 
 export default function EditDelete({setBalance, transaction, onClose }) {
   const modalRef = useRef();
   const [isEditing, setIsEditing] = useState(false);
   const [editedTransaction, setEditedTransaction] = useState({ ...transaction });
+  // const [flag,setFlag]=useState(1);
+
+  useEffect(() => {
+  const decryptTransaction = async () => {
+    try {
+      const keyString = sessionStorage.getItem("Ekey");
+      if (!keyString) {
+        toast.error("Missing decryption key");
+        return;
+      }
+      const key = base64ToUint8Array(keyString);
+
+      const decrypted = {
+        ...transaction,
+        title: await decrypt(transaction.title, key),
+        note: await decrypt(transaction.note || "", key),
+        category: await decrypt(transaction.category, key)
+      };
+
+      setEditedTransaction(decrypted);
+    } catch (error) {
+      toast.error("Failed to decrypt transaction");
+      console.error("Decryption error:", error);
+    }
+  };
+
+  decryptTransaction();
+  }, []);
 
   const handleBackdropClick = (e) => {
     if (modalRef.current === e.target) {
@@ -29,12 +58,23 @@ export default function EditDelete({setBalance, transaction, onClose }) {
 
   const handleEdit=async ()=>{
     try {
-        const res=await axios.patch(`/expense/${transaction._id}`,editedTransaction)
-        console.log(res.data)
-        setBalance(res.data.updatedUser.balance)
-        toast.success(res.data.message)
-        setIsEditing(false);
-        onClose()
+      const keyString=sessionStorage.getItem("Ekey");
+      if(!keyString){
+        toast.error("Error: Key not found");
+      }
+      const key=base64ToUint8Array(keyString);
+      const encrypted={
+        ...editedTransaction,
+        title: await encrypt(editedTransaction.title,key),
+        note: await encrypt(editedTransaction.note,key),
+        category: await encrypt(editedTransaction.category,key)
+      }
+      const res=await axios.patch(`/expense/${transaction._id}`,encrypted)
+      console.log(res.data)
+      setBalance(res.data.updatedUser.balance)
+      toast.success(res.data.message)
+      setIsEditing(false);
+      onClose()
     } catch (error) {
         toast.error(error?.response?.data?.error || "Something went wrong")
         console.log(error)

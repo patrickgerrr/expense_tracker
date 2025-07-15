@@ -13,7 +13,7 @@ exports.getAllExpenses= async(req,res)=>{
 }
 
 exports.createExpense=async(req,res)=>{
-    var expense=req.body.data
+    var expense=req.body.encryptedData
     expense.userId=req.body.userId
     try{
         if(isNaN(expense.amount) || expense.amount <=0){

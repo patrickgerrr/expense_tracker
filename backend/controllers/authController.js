@@ -130,3 +130,21 @@ exports.checkUser = async (req, res) => {
     return res.status(400).send({error:"Error in user input validation"})
   }
 }
+
+exports.getKey=async(req,res)=>{
+  try{
+    const auth = req.headers.authorization
+    if(!auth)return res.status(401).send({error: "Unauthorized"})
+    const token = auth.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const user = await User.findById(decoded.id)
+    if(!user){
+      return res.status(404).send({error:"User not found"})
+    }
+    const key=user.encryptionKey.toString("base64");
+    return res.status(200).send({key: key})
+  }catch(error){
+    console.error("Error in getting key", error.message)
+    return res.status(400).send({error:"Error in getting key"})
+  }
+}

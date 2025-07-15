@@ -39,6 +39,7 @@ export default function Dashboard() {
     setCurrentPage(1)
   };
 
+  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -48,7 +49,19 @@ export default function Dashboard() {
     } else {
       navigate("/login");
     }
-  }, []);
+    const fetchAndStoreKey = async () => {
+      try {
+        const res = await axios.get("/auth/getKey", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      sessionStorage.setItem("Ekey", res.data.key);
+      } catch (err) {
+        toast.error("Failed to fetch encryption key");
+        console.log(err)
+      }
+    };
+    fetchAndStoreKey();
+ }, []);
 
   useEffect(() => {
     const sortHisRealTime = (history) =>{
@@ -127,6 +140,7 @@ export default function Dashboard() {
             onClick={() => {
               if (!window.confirm("Are you sure you want to sign out?")) return
               localStorage.removeItem("token");
+              sessionStorage.removeItem("Ekey");
               toast.success("Signed out successfully")
               navigate("/login");
             }}

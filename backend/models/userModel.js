@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema({
     balance: {
         type: Number,
         default: 0
+    },
+
+    encryptionKey: {
+        type: Buffer,
+        default: ()=>require("crypto").randomBytes(32)
     }
 
     //commented out roles as that would make it too complicated

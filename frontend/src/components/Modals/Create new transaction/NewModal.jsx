@@ -3,6 +3,7 @@ import { set, useForm } from "react-hook-form";
 import { useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { encrypt,base64ToUint8Array } from "../../../utils/crypto";
 
 export default function NewModal(props) {
   const {
@@ -25,14 +26,32 @@ export default function NewModal(props) {
     }
   };
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const onSubmit = async (data) => {
     const amount = Number(data.amount)
     if (isNaN(amount) || amount <=0){
       toast.error("Amount should  be a positive number")
       return
     }
+    const keyString = sessionStorage.getItem("Ekey");
+    if (!keyString) {
+      toast.error("Encryption key missing. Please log in again.");
+      return;
+    }
+    const rawKey = base64ToUint8Array(keyString);
+
     try{
-      const res= await axios.post("/expense", {data,userId:props.id})
+      const encryptedTitle = await encrypt(data.title, rawKey);
+      const encryptedNote = await encrypt(data.note || "", rawKey);
+      const encryptedCategory = await encrypt(data.category, rawKey);
+
+      const encryptedData = {
+        amount,
+        title: encryptedTitle,
+        note: encryptedNote,
+        category: encryptedCategory
+      };
+      const res= await axios.post("/expense", {encryptedData,userId:props.id})
       console.log(res.data)
       props.setBalance(res.data.newBalance)
       toast.success(res.data.message)
@@ -41,8 +60,6 @@ export default function NewModal(props) {
       console.log(error?.response?.data?.error)
       toast.error(error?.response?.data?.error || "Something went wrong")
     }
-    
-
   };
 
   return (
