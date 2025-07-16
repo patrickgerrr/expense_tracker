@@ -54,16 +54,17 @@ export default function HomePage() {
             Take charge of your spending with our all-new expense tracking
             solution. Your expenses under control, start saving smarter today.
           </div>
-        </div>
-        <div
+          <div
           className="get-started"
           id="get-started"
           tabIndex={0}
           role="button"
           onClick={() => navigate("/signup")}
-        >
-          Get Started ⟶
+          >
+            Get Started ⟶
+          </div>
         </div>
+        
       </div>
     </>
   );

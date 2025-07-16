@@ -1,95 +1,154 @@
-html,body{
-    margin: 0px;
-    padding: 0px;
+html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: black;
     color: white;
+    box-sizing: border-box;
 }
 
-.homepage-ancestor-container{
+.homepage-ancestor-container {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-.homepage-header{
+.homepage-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    height: 9.5vh;
-    background-color: #222222;
-    padding: 12px;
-
-}
-
-.homepage-header-left{
-    display: flex;
-    gap: 5px;
     align-items: center;
+    background-color: #222;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
 }
 
-.homepage-logo{
-    font-size: 3rem;
+.homepage-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-.homepage-heading-text{
-    font-size: 2.5em;
+.homepage-logo {
+    font-size: 2.5rem;
+}
+
+.homepage-heading-text {
+    font-size: 1.8rem;
     font-weight: 700;
 }
 
-.homepage-links-container{
+.homepage-links-container {
     display: flex;
-    gap: 1em;
-    font-size: 1.3em;
-    margin-right: 0.5em;
+    gap: 1rem;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
 }
-.homepage-links-container div{
+
+.homepage-links-container div {
     padding: 5px;
-    transition: text-shadow 0.3s ease
+    transition: text-shadow 0.3s ease;
 }
-.homepage-links-container div:hover{
+
+.homepage-links-container div:hover {
     cursor: pointer;
-    /* text-decoration-line: underline;
-    text-decoration-style: solid; */
     text-shadow: 0 0 2px white;
 }
 
-.homepage-body-container{
-    /*  height: 85vh; */
+.homepage-body-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
     margin-top: 4rem;
     gap: 1rem;
+    padding: 0 1rem;
 }
 
-.homepage-sub-header{
+.homepage-sub-header {
     font-weight: 900;
-    font-size: 5rem;
+    font-size: 4rem;
+    text-align: center;
+    line-height: 1.2;
 }
 
-.homepage-body-text{
-    white-space: normal;
-    max-width: 700px;
-    font-size: 2rem;
+.homepage-body-text {
+    max-width: 90%;
+    font-size: 1.5rem;
     text-align: center;
 }
-.get-started{
-    align-self:flex-end;
-    margin-top: 7rem;
-    font-size: larger;
-    margin-right: 25rem;
-    padding-left: 10px;
-    padding-right: 50px;
-    padding-top: 5px;
-    padding-bottom: 2px;
+
+/* .get-started {
+    margin-top: 2rem;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
     border: 1px solid white;
     transition: background-color 0.3s ease, color 0.3s ease;
+    align-self: center;
+    justify-self: center;
+} */
+
+.get-started {
+    margin-top: 2rem;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    border: 1px solid white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    align-self: center;
 }
 
-.get-started:hover{
+
+.get-started:hover {
     background-color: white;
     color: black;
     cursor: pointer;
+}
+
+/* ----------- Media Queries ----------- */
+
+@media (max-width: 768px) {
+    .homepage-sub-header {
+        font-size: 3rem;
+    }
+
+    .homepage-heading-text {
+        font-size: 1.5rem;
+    }
+
+    .homepage-body-text {
+        font-size: 1.2rem;
+    }
+
+    .get-started {
+        margin-top: 3rem;
+        padding: 0.4rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .homepage-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .homepage-links-container {
+        justify-content: flex-start;
+        font-size: 1rem;
+    }
+
+    .homepage-sub-header {
+        font-size: 2.2rem;
+    }
+
+    .homepage-body-text {
+        font-size: 1rem;
+    }
+
+    .get-started {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+    }
 }

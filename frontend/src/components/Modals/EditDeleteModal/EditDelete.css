@@ -1,106 +1,17 @@
-.modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  backdrop-filter: blur(4px);
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 1.5rem;
+    width: 80%;
+  }
 
-.modal-card {
-  background-color: #1e1e1e;
-  color: white;
-  padding: 2rem;
-  border-radius: 12px;
-  max-width: 400px;
-  width: 90%;
-}
+  .submit-save {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+    margin-top: 1.5rem;
+  }
 
-.transaction-form label {
-  display: block;
-  margin-bottom: 4px;
-}
-
-.transaction-form input {
-  width: 100%;
-  padding: 0.4rem;
-  border: none;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  background-color: #2e2e2e;
-  color: white;
-}
-
-.submit-container-edit {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
-.submit-save {
-  padding: 0.7rem 2rem;
-    background-color: #1c1c1c ;
-    color: white;
-    border: 1px solid white;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.3s ease;
-    text-align: center;
-    margin-top: 3rem;
-}
-
-.submit-save:hover {
-    background-color: rgb(133, 228, 132);
-    color: rgb(255, 255, 255);
-} 
-
-.category {
-  padding: 0.8rem;
-  width: 288px;
-  background-color: #333;
-  border: 1px solid #555;
-  border-radius: 8px;
-  color: white;
-  font-size: 1rem;
-  outline: none;
-  appearance: none; 
-  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-  background-repeat: no-repeat;
-  background-position-x: 263px;
-  background-position-y: center;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-
-.category:focus {
-  border-color: white;
-}
-
-textarea{
-  resize: none;
-  padding: 0.75rem 1rem;
-  width: 255px;
-  background-color: #333;
-  border: 1px solid #555;
-  border-radius: 0px;
-  color: #999;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
-  font-style:italic;
-  height: 100px
-
-}
-
-#date-uneditable{
-    background-color: #1c1c1c;
-    border: none;
-    color: gray;
-
+  .submit-container-edit {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
