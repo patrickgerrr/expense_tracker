@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState ,PureComponent } from "react";
 import NumberFlow from '@number-flow/react'
 import EditDelete from "../../components/Modals/EditDeleteModal/EditDelete";
 import NewModal from "../../components/Modals/Create new transaction/NewModal";
@@ -10,6 +10,8 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { base64ToUint8Array, decrypt } from "../../utils/crypto";
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
   const [history, setHistory] = useState([]);
@@ -23,6 +25,56 @@ export default function Dashboard() {
   const [updateBalanceModal, setUpdateBalanceModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const transactionsPerPage = 6;
+  const [category,setCategory] = useState([
+    // {
+    //   id:"groceries",
+    //   v:0
+    // },
+    // {
+    //   id:"entertainment",
+    //   v:0
+    // },
+    // {
+    //   id:"bills",
+    //   v:0
+    // },
+    // {
+    //   id:"",
+    // }
+  ]);
+  const date=new Date();
+  const month=date.getMonth()+1;
+  const [m,setM]=useState(month);
+  
+  useEffect(()=>{
+    const setC=async ()=>{let cat={
+      groceries:0,
+      entertainment:0,
+      transport:0,
+      other:0,
+      personal:0,
+      bills:0,
+      medical:0
+    }
+    let c=[]
+    const keyString=sessionStorage.getItem("Ekey");
+    if(!keyString )return;
+    const key=base64ToUint8Array(keyString);
+    for(const x of history ){
+      const d=new Date(x.date);
+      const month=d.getMonth()+1;
+      if(month==m){
+        const c=await decrypt(x.category,key);
+        cat[c]+=x.amount;
+      }
+    }
+    for(const x in cat){
+      c.push({id:x,v:cat[x]})
+    }
+    setCategory(c);
+    console.log(category)}
+    setC()
+  },[history,m])
 
   const handleSortChange = (e) => {
     const selected = e.target.value;
@@ -254,6 +306,35 @@ export default function Dashboard() {
               setBalance={setBalance}
             />
           )}
+        </div>
+        <div className="chart" >
+          <div style={{ width: '70%', height: 400 }}>
+            <ResponsiveContainer width="100%" height="100%">
+            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={category}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="id" />
+              <PolarRadiusAxis />
+              <Radar name="cat" dataKey="v" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+            </RadarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="category-legend">
+            {
+              
+              Array.isArray(category) ?(
+               [...category].sort ((a,b) => b.v - a.v).map((item,index)=>{
+                  return(
+                    <div key={index} className="category-item">
+                      <span>  {index+1}  </span>
+                      <span>  {item.id}  </span>
+                      <strong>  ₹{commafy(item.v)}</strong>
+                    </div>
+                  )
+                })
+              ):(
+                <div className="no-transactions">No transactions</div>
+              )}
+          </div>
         </div>
       </div>
     </>
